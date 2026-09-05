@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rathan28.github.io/rathan-portfolio/sitemap.xml
