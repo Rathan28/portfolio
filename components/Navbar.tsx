@@ -2,24 +2,25 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { DynamicClock } from './DynamicClock';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: 'Building', href: '#building' },
-    { name: 'Work', href: '#work' },
-    { name: 'About', href: '#about' },
-    { name: 'Journey', href: '#journey' },
-    { name: 'LinkedIn', href: '#linkedin' },
-    { name: 'Writing', href: '#writing' },
-    { name: 'Contact', href: '#contact' },
+    { num: '01', name: 'Building', href: '#building' },
+    { num: '02', name: 'Work', href: '#work' },
+    { num: '03', name: 'About', href: '#about' },
+    { num: '04', name: 'Journey', href: '#journey' },
+    { num: '05', name: 'LinkedIn', href: '#linkedin' },
+    { num: '06', name: 'Writing', href: '#writing' },
+    { num: '07', name: 'Contact', href: '#contact' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-bg/90 backdrop-blur-md border-b border-editorial-line/60 transition-all duration-300">
+    <header className="sticky top-0 z-50 w-full bg-bg/85 backdrop-blur-md border-b border-editorial-line/60 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-16 flex items-center justify-between">
         {/* Left: Brand Name */}
         <Link
@@ -66,50 +67,78 @@ export function Navbar() {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
-            className="p-1.5 text-editorial-black hover:text-editorial-muted focus:outline-none transition-colors"
+            className="p-2 rounded-full border border-editorial-line/80 bg-bg-card/60 backdrop-blur-md text-editorial-black hover:bg-editorial-black hover:text-bg focus:outline-none transition-all duration-300"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Fullscreen Overlay */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 top-16 bg-bg z-40 flex flex-col justify-between p-6 sm:p-10 border-t border-editorial-line animate-fadeIn">
-          <div className="space-y-6">
-            <div className="text-[10px] font-mono uppercase tracking-widest text-editorial-subtle mb-4">
-              NAVIGATION
-            </div>
-            <nav className="flex flex-col space-y-4">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-2xl font-sans font-medium tracking-tight text-editorial-black hover:text-editorial-muted transition-colors flex items-center justify-between border-b border-editorial-line/40 pb-3"
-                >
-                  <span>{link.name}</span>
-                  <span className="text-xs font-mono text-editorial-subtle">↗</span>
-                </a>
-              ))}
-            </nav>
-          </div>
+      {/* Mobile Menu Fullscreen Frosted Glass Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-[#F9F8F6]/85 backdrop-blur-xl border-t border-editorial-line/80 shadow-2xl flex flex-col justify-between p-6 sm:p-10 overflow-y-auto"
+          >
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b border-editorial-line/60 pb-3">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-editorial-subtle">
+                  NAVIGATION INDEX
+                </span>
+                <span className="text-[10px] font-mono text-editorial-black font-semibold">
+                  07 SECTIONS
+                </span>
+              </div>
 
-          <div className="pt-8 border-t border-editorial-line space-y-4">
-            <div className="flex justify-between items-center text-xs font-mono text-editorial-muted">
-              <span>FOUNDER @ XTICH</span>
-              <span>KARNATAKA, IN</span>
+              <nav className="flex flex-col space-y-1">
+                {navLinks.map((link, idx) => (
+                  <motion.a
+                    key={link.name}
+                    href={link.href}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.25, delay: idx * 0.04 }}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="group px-3 py-3 rounded-lg hover:bg-editorial-black/5 transition-all duration-200 flex items-center justify-between text-editorial-black"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <span className="text-xs font-mono text-editorial-subtle group-hover:text-editorial-black transition-colors">
+                        {link.num}
+                      </span>
+                      <span className="text-xl font-sans font-semibold tracking-tight">
+                        {link.name}
+                      </span>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-editorial-subtle group-hover:text-editorial-black transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </motion.a>
+                ))}
+              </nav>
             </div>
-            <a
-              href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full inline-flex items-center justify-center text-sm font-sans font-semibold py-3 rounded-full bg-editorial-black text-bg hover:opacity-90 transition-opacity"
-            >
-              Get in Touch
-            </a>
-          </div>
-        </div>
-      )}
+
+            {/* Bottom Frosted Glass Card */}
+            <div className="pt-6 mt-6 border-t border-editorial-line/60">
+              <div className="p-5 rounded-xl bg-bg-card/70 backdrop-blur-md border border-editorial-line/80 space-y-4 shadow-sm">
+                <div className="flex justify-between items-center text-xs font-mono text-editorial-muted">
+                  <span className="font-semibold text-editorial-black uppercase">FOUNDER @ XTICH</span>
+                  <span>DAVANAGERE, IN</span>
+                </div>
+                <a
+                  href="#contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full inline-flex items-center justify-center space-x-2 text-xs font-mono font-bold tracking-wider py-3.5 rounded-lg bg-editorial-black text-bg hover:bg-editorial-dark transition-all duration-300 shadow"
+                >
+                  <span>LET'S TALK</span>
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
